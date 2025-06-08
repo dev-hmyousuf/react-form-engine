@@ -15,10 +15,17 @@ export const FormEngine: React.FC<FormEngineProps> = ({ schema, className }) => 
     ? `${schema.design?.className || ''} ${className || ''}`
     : `${schema.design?.className || ''} ${className || ''}`;
 
-  const visibleFields = Object.entries(schema.fields).filter(([fieldName]) => {
-    const fieldProps = getFieldProps(fieldName);
-    // This would be enhanced with actual visibility logic from the engine
-    return true; // Simplified for now
+  const visibleFields = Object.entries(schema.fields).filter(([fieldName, fieldConfig]) => {
+    // Check if field should be visible based on conditional logic
+    if (fieldConfig.visibleIf) {
+      try {
+        return fieldConfig.visibleIf(state.values);
+      } catch (error) {
+        console.warn(`Error evaluating visibleIf for field ${fieldName}:`, error);
+        return true;
+      }
+    }
+    return true;
   });
 
   return (

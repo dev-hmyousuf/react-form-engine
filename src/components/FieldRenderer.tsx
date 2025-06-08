@@ -22,10 +22,41 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({
   fieldProps,
   tailwind,
 }) => {
+  // Extract the field-specific props from fieldConfig and merge with fieldProps
+  const {
+    label,
+    placeholder,
+    disabled,
+    readOnly,
+    required,
+    autoFocus,
+    error,
+    helperText,
+    tooltip,
+    leftIcon,
+    rightIcon,
+    design,
+    ...configRest
+  } = fieldConfig;
+
   const commonProps = {
     name: fieldName,
+    label,
+    placeholder,
+    disabled,
+    readOnly,
+    required,
+    autoFocus,
+    error: fieldProps.error,
+    helperText,
+    tooltip,
+    leftIcon,
+    rightIcon,
+    design,
     tailwind,
-    ...fieldProps,
+    value: fieldProps.value,
+    onChange: fieldProps.onChange,
+    onBlur: fieldProps.onBlur,
   };
 
   switch (fieldConfig.type) {
